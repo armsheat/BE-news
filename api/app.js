@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 
 const getTopics = require('./controllers/topicController');
+
 const getArticle = require('./controllers/ArticleController');
 
 app.use(express.json());

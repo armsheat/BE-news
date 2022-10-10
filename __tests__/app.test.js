@@ -36,7 +36,6 @@ describe('GET /api/topics', () => {
           expect(msg).toBe('page cannot be found.')
         })
     });
-
 });
 
 describe('GET api/articles/:article_id', () => {
