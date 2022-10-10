@@ -106,11 +106,11 @@ describe('GET api/users', () => {
   });
 });
 
-describe('PATCH "api/articles/article_id"', () => {
+describe.only('PATCH "api/articles/:article_id"', () => {
   test('status 200, responds with the updated article and correctly amended votes', () => {
     return request(app)
-    .patch('api/articles/2')
-    .send({ inc_votes : 100 })
+    .patch("/api/articles/2")
+    .send({ 'inc_votes' : 100 })
     .expect(200)
     .then(({ body }) => {
       const { article } = body
