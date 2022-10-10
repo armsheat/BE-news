@@ -8,7 +8,7 @@ app.use(express.json());
 app.get("/api/topics", getTopics);
 
 //all wrong paths get a 404
-app.all("*", (req, res, next) => {
+app.all("/api/*", (req, res, next) => {
     res
       .status(404)
       .send({ msg: "page cannot be found." });
