@@ -36,5 +36,24 @@ describe('GET /api/topics', () => {
           expect(msg).toBe('page cannot be found.')
         })
     });
+});
 
+describe('GET api/users', () => {
+  test('status 200, responds with ', () => {
+    return request(app)
+    .get("/api/users")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.users).toBeInstanceOf(Array);
+      expect(body.users.length).toBe(3);
+      body.users.forEach((user) => {
+        expect(user).toEqual(
+          expect.objectContaining({
+            slug: expect.any(String),
+            description: expect.any(String),
+          })
+        );
+      });
+    });    
+  });
 });
