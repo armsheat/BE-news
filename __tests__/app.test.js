@@ -83,12 +83,13 @@ describe('GET api/users', () => {
     .expect(200)
     .then(({ body }) => {
       expect(body.users).toBeInstanceOf(Array);
-      expect(body.users.length).toBe(3);
+      expect(body.users.length).toBe(4);
       body.users.forEach((user) => {
         expect(user).toEqual(
           expect.objectContaining({
-            slug: expect.any(String),
-            description: expect.any(String),
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
           })
         );
       });
