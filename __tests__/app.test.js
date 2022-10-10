@@ -57,7 +57,6 @@ describe('GET api/articles/:article_id', () => {
             votes: 0,
           }
         );
-      
     }); 
   });
 });
