@@ -10,7 +10,7 @@ afterAll(() => db.end());
 beforeEach(() => seed(testData));
 
 describe('GET /api/topics', () => {
-    test('status 200 should return an array of topic objects containing a slug and description', () => {
+    test('status 200, should return an array of topic objects containing a slug and description', () => {
         return request(app)
         .get("/api/topics")
         .expect(200)
@@ -36,4 +36,5 @@ describe('GET /api/topics', () => {
           expect(msg).toBe('page cannot be found.')
         })
     });
+
 });
