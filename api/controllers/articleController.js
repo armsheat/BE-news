@@ -10,7 +10,6 @@ function getArticleByID(req, res, next) {
 }
 
 function updateArticleByID(req, res, next) {
-    console.log('in the controller')
     const { article_id } = req.params;
     const { inc_votes } = req.body;
     AmendArticleByID(article_id, inc_votes).then((article) => {

@@ -126,6 +126,16 @@ describe.only('PATCH "api/articles/:article_id"', () => {
         })
     })
   });
+  test('can update the votes with a negative number', () => {
+    return request(app)
+    .patch("/api/articles/4")
+    .send({ 'inc_votes' : -100 })
+    .expect(200)
+    .then(({ body }) => {
+      const { article } = body
+      expect(article.votes).toBe(-100)
+    })
+  });
   test('status 404, responds with not found when wrong article id put in', () => {
     return request(app)
     .patch("/api/articles/20000")
@@ -135,9 +145,10 @@ describe.only('PATCH "api/articles/:article_id"', () => {
       expect(body.msg).toBe('no article found with that id')
     })
   });
-  test('status 400, when the id is not a number', () => {
+  test('status 400, when the article_id is not a number', () => {
     return request(app)
     .patch("/api/articles/SELECT * FROM articles")
+    .send({ 'inc_votes' : 100 })
     .expect(400)
     .then(({ body }) => {
       expect(body.msg).toBe('Bad request');
