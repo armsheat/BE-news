@@ -13,7 +13,9 @@ app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticleByID);
 
-app.get("/api/users", getUsers)
+app.get("/api/users", getUsers);
+
+app.get("api/articles/article_id", updateArticle)
 
 //all wrong paths get a 404
 app.all("/api/*", (req, res, next) => {
