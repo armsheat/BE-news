@@ -3,13 +3,13 @@ const app = express();
 
 const getTopics = require('./controllers/topicController');
 
-const getArticle = require('./controllers/ArticleController');
+const getArticleByID = require('./controllers/articleController');
 
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
 
-app.get("/api/articles/:article_id", getArticle)
+app.get("/api/articles/:article_id", getArticleByID);
 
 //all wrong paths get a 404
 app.all("/api/*", (req, res, next) => {
