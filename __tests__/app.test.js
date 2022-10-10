@@ -95,4 +95,13 @@ describe('GET api/users', () => {
       });
     }); 
   });
+  test('status 404, responds with a page cannot be found message when wrong path put in', () => {
+    return request(app)
+      .get("/api/user")
+      .expect(404)
+      .then(( { body }) => {
+        const { msg } = body;
+        expect(msg).toBe('page cannot be found.')
+      })
+  });
 });
