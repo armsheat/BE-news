@@ -18,6 +18,24 @@ app.all("/api/*", (req, res, next) => {
       .send({ msg: "page cannot be found." });
   });
 
+//JS ERROR HANDLING
+app.use((err, req, res, next) => {
+    if (err.status) { 
+      res.status(err.status).send({ msg: err.msg });
+    } else {
+      next(err);
+    }
+  });
+
+//PSQL ERROR HANDLING
+app.use((err, req, res, next) => {
+    if (err.code && err.code.length === 5) {
+      res.status(400).send({ msg: "Bad request" });
+    } else {
+      next(err);
+    }
+  });
+
 //DEFAULT ERROR HANDLING
 app.use((err, req, res, next) => {
     console.log(err);

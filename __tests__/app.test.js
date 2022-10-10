@@ -58,4 +58,20 @@ describe('GET api/articles/:article_id', () => {
         );
     }); 
   });
+  test('status 404, responds with not found when wrong article id put in', () => {
+    return request(app)
+    .get("/api/articles/20000")
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe('no article found with that id')
+    })
+  });
+  test('status 400, when the id is not a number', () => {
+    return request(app)
+    .get("/api/articles/SELECT * FROM articles")
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Bad request');
+    })
+  });
 });
