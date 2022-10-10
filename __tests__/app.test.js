@@ -75,3 +75,33 @@ describe('GET api/articles/:article_id', () => {
     })
   });
 });
+
+describe('GET api/users', () => {
+  test('status 200, responds with an array of user objects', () => {
+    return request(app)
+    .get("/api/users")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.users).toBeInstanceOf(Array);
+      expect(body.users.length).toBe(4);
+      body.users.forEach((user) => {
+        expect(user).toEqual(
+          expect.objectContaining({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+          })
+        );
+      });
+    }); 
+  });
+  test('status 404, responds with a page cannot be found message when wrong path put in', () => {
+    return request(app)
+      .get("/api/user")
+      .expect(404)
+      .then(( { body }) => {
+        const { msg } = body;
+        expect(msg).toBe('page cannot be found.')
+      })
+  });
+});
