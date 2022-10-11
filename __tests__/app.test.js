@@ -234,6 +234,14 @@ describe.only('GET api/articles/:article_id/comments', () => {
       expect(body.msg).toBe('no article found with that id')
     })
   });
+  test('status 400 for an article id of the wrong type', () => {
+    return request(app)
+    .get("/api/articles/SELECT * FROM articles/comments")
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Bad request');
+    })
+  });
 });
 
 describe('PATCH "api/articles/:article_id"', () => {
