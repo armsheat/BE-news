@@ -139,9 +139,10 @@ describe.only('GET api/articles', () => {
           number_of_comments: '2',
         }]
       )
-    });  
+    });
+
   });
-  test('the articles should be sorted by date descending', () => {
+  test('status 200: the articles should be sorted by date descending', () => {
     return request(app)
     .get("/api/articles")
     .expect(200)
@@ -151,6 +152,16 @@ describe.only('GET api/articles', () => {
       expect(body.articles).toBeSortedBy("created_at", {
         descending: true,
       });
+  });
+  });
+  test('status 404: the query is not a valid topic', () => {
+    return request(app)
+    .get("/api/articles?topic=dogs")
+    .expect(404)
+    .then(( { body }) => {
+      const { msg } = body;
+      expect(msg).toBe('invalid query')
+    })
   });
 });
 
@@ -251,4 +262,4 @@ describe('PATCH "api/articles/:article_id"', () => {
     })
   });
   });
-});
+

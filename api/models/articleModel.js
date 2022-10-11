@@ -37,9 +37,12 @@ function retrieveArticles(topic) {
         topicArray.push(topic);
     }
     baseQuery += ` GROUP BY articles.article_id ORDER BY created_at DESC;`
-    console.log(baseQuery)
     return db.query(baseQuery, topicArray).then(({ rows }) => {
-        return rows;
+        if (rows[0]) {
+            return rows;
+        } else {
+            return Promise.reject({ status:404, msg:'invalid query'});
+        }
     })
 }
 
