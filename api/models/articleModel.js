@@ -1,9 +1,15 @@
 const db = require('./../../db/connection');
 
 function retrieveArticleByID (article_id) {
-    return db.query(`SELECT * FROM articles WHERE article_id = $1`, [article_id]).then(({ rows }) => {
+    return db.query(`
+    SELECT articles.* , COUNT(comments.article_id) AS number_of_comments 
+    FROM articles 
+    LEFT JOIN comments ON comments.article_id = articles.article_id
+    WHERE articles.article_id = $1
+    GROUP BY articles.article_id;`, 
+    [article_id]).then(({ rows }) => {
         if (rows[0]) {
-            return rows[0];
+           return rows[0];
         } else {
             return Promise.reject({ status:404, msg:'no article found with that id'});
         }
