@@ -36,7 +36,7 @@ function retrieveArticles(topic) {
         baseQuery += ` WHERE topic = $1`;
         topicArray.push(topic);
     }
-    baseQuery += ` GROUP BY articles.article_id;`
+    baseQuery += ` GROUP BY articles.article_id ORDER BY created_at DESC;`
     console.log(baseQuery)
     return db.query(baseQuery, topicArray).then(({ rows }) => {
         return rows;

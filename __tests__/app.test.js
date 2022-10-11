@@ -1,5 +1,6 @@
 const { afterAll, beforeEach } = require("@jest/globals");
 const request = require("supertest");
+const toBeSortedBy = require('jest-sorted');
 
 const seed = require("../db/seeds/seed");
 const db = require('../db/connection');
@@ -147,7 +148,9 @@ describe.only('GET api/articles', () => {
     .then(({ body }) => {
       expect(body.articles).toBeInstanceOf(Array);
       expect(body.articles.length).toBe(12);
-      
+      expect(body.articles).toBeSortedBy("created_at", {
+        descending: true,
+      });
   });
 });
 
@@ -247,5 +250,5 @@ describe('PATCH "api/articles/:article_id"', () => {
       expect(body.msg).toBe('Bad request');
     })
   });
+  });
 });
-
