@@ -154,13 +154,22 @@ describe.only('GET api/articles', () => {
       });
   });
   });
-  test('status 404: the query is not a valid topic', () => {
+  test('status 400: the query is not a valid topic', () => {
     return request(app)
     .get("/api/articles?topic=dogs")
-    .expect(404)
+    .expect(400)
     .then(( { body }) => {
       const { msg } = body;
-      expect(msg).toBe('invalid query')
+      expect(msg).toBe('Bad request')
+    })
+  });
+  test('status 400: the query is the wrong type', () => {
+    return request(app)
+    .get("/api/articles?topic=SELECT * FROM users")
+    .expect(400)
+    .then(( { body }) => {
+      const { msg } = body;
+      expect(msg).toBe('Bad request');
     })
   });
 });
