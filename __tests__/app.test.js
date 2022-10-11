@@ -154,4 +154,22 @@ describe('PATCH "api/articles/:article_id"', () => {
       expect(body.msg).toBe('Bad request');
     })
   });
+  test('status 400, when inc_votes is not a number', () => {
+    return request(app)
+    .patch("/api/articles/2")
+    .send({ 'inc_votes' : 'SELECT * FROM articles' })
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Bad request');
+    })
+  });
+  test('status 400, when inc_votes is empty', () => {
+    return request(app)
+    .patch("/api/articles/3")
+    .send({})
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Bad request');
+    })
+  });
 });
