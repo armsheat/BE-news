@@ -27,5 +27,21 @@ function AmendArticleByID(article_id, inc_votes) {
     })
 }
 
+function retrieveArticles(topic) {
+    let baseQuery = `SELECT articles.* , COUNT(comments.article_id) AS number_of_comments 
+    FROM articles 
+    LEFT JOIN comments ON comments.article_id = articles.article_id`;
+    const topicArray = [];
+    if (topic) {
+        baseQuery += ` WHERE topic = $1`;
+        topicArray.push(topic);
+    }
+    baseQuery += ` GROUP BY articles.article_id;`
+    console.log(baseQuery)
+    return db.query(baseQuery, topicArray).then(({ rows }) => {
+        return rows;
+    })
+}
 
-module.exports = { retrieveArticleByID, AmendArticleByID };
+
+module.exports = { retrieveArticleByID, AmendArticleByID, retrieveArticles };
