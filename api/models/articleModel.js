@@ -27,6 +27,19 @@ function AmendArticleByID(article_id, inc_votes) {
     })
 }
 
+function retrieveCommentsByArticle(article_id) {
+    return db.query(`
+    SELECT * FROM comments 
+    WHERE comments.article_id = $1`, 
+    [article_id]).then(({ rows }) => {
+        if (rows[0]) {
+           return rows;
+        } else {
+            return Promise.reject({ status:404, msg:'no article found with that id'});
+        }
+    })
+}
+
 function retrieveArticles(topic) {
     let baseQuery = `SELECT articles.* , COUNT(comments.article_id) AS number_of_comments 
     FROM articles 
@@ -52,4 +65,4 @@ function retrieveArticles(topic) {
 }
 
 
-module.exports = { retrieveArticleByID, AmendArticleByID, retrieveArticles };
+module.exports = { retrieveArticleByID, AmendArticleByID, retrieveArticles, retrieveCommentsByArticle };

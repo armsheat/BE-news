@@ -96,7 +96,7 @@ describe('GET api/articles/:article_id', () => {
   });
 });
 
-describe.only('GET api/articles', () => {
+describe('GET api/articles', () => {
   test('status 200: returns an array of all articles', () => {
     return request(app)
     .get("/api/articles")
@@ -201,6 +201,30 @@ describe('GET api/users', () => {
         const { msg } = body;
         expect(msg).toBe('page cannot be found.')
       })
+  });
+});
+
+describe.only('GET api/articles/:article_id/comments', () => {
+  test('status 200: responds with an array of comments associated with the correct article', () => {
+    return request(app)
+    .get("/api/articles/9/comments")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.comments).toBeInstanceOf(Array);
+      expect(body.comments.length).toBe(2);
+      body.comments.forEach((comment) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            article_id: expect.any(Number),
+            votes: expect.any(Number),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            comment_id: expect.any(Number),
+          })
+        );
+      });
+    }); 
   });
 });
 
