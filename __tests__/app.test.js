@@ -38,7 +38,7 @@ describe('GET /api/topics', () => {
     });
 });
 
-describe.only('GET api/articles/:article_id', () => {
+describe('GET api/articles/:article_id', () => {
   test('status 200, responds with the correct article object and comment count', () => {
     return request(app)
     .get("/api/articles/3")
@@ -191,4 +191,8 @@ describe('PATCH "api/articles/:article_id"', () => {
       expect(body.msg).toBe('Bad request');
     })
   });
+});
+
+describe('GET api/articles/:article_id/comments', () => {
+  
 });

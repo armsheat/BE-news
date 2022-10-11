@@ -1,4 +1,4 @@
-const { retrieveArticleByID, AmendArticleByID } = require('./../models/articleModel');
+const { retrieveArticleByID, AmendArticleByID, retrieveCommentsByArticle } = require('./../models/articleModel');
 
 function getArticleByID(req, res, next) {
     const { article_id } = req.params;
@@ -19,4 +19,13 @@ function updateArticleByID(req, res, next) {
     });
 }
 
-module.exports = { getArticleByID, updateArticleByID };
+function getCommentsByArticle(req, res, next) {
+    const { article_id } = req.params;
+    retrieveCommentsByArticle(article_id).then((article) => {
+        res.status(200).send({ article });
+    }).catch((err) => {
+        next(err);
+    });
+}
+
+module.exports = { getArticleByID, updateArticleByID, getCommentsByArticle };

@@ -27,5 +27,9 @@ function AmendArticleByID(article_id, inc_votes) {
     })
 }
 
+function retrieveCommentsByArticle(article_id) {
+    
+}
 
-module.exports = { retrieveArticleByID, AmendArticleByID };
+
+module.exports = { retrieveArticleByID, AmendArticleByID, retrieveCommentsByArticle };
