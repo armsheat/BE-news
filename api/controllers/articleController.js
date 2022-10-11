@@ -30,7 +30,17 @@ function getArticles(req, res, next) {
 
 function getCommentsByArticle(req, res, next) {
     const { article_id } = req.params;
-    retrieveCommentsByArticle(article_id).then((comments) => {
+    console.log(article_id)
+
+    getArticleByID(article_id).then((article) => {
+        if (article.number_of_comments === 0) {
+            res.status(200).send({ msg: 'this article has no comments' })
+        }
+    })
+    //invoke get article by id
+    // if the number of comments = 0
+    // send msg 'this article has no comments'
+    retrieveCommentsByArticle(req.params.article_id).then((comments) => {
         res.status(200).send({ comments });
     }).catch((err) => {
         next(err);
