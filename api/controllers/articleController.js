@@ -1,4 +1,6 @@
-const { retrieveArticleByID, AmendArticleByID, retrieveCommentsByArticle } = require('./../models/articleModel');
+
+const { retrieveArticleByID, AmendArticleByID, retrieveCommentsByArticle, retrieveArticles } = require('./../models/articleModel');
+
 
 function getArticleByID(req, res, next) {
     const { article_id } = req.params;
@@ -28,4 +30,15 @@ function getCommentsByArticle(req, res, next) {
     });
 }
 
-module.exports = { getArticleByID, updateArticleByID, getCommentsByArticle };
+function getArticles(req, res, next) {
+    const { topic } = req.query;
+    retrieveArticles(topic).then((articles) => {
+        res.status(200).send({ articles });
+    }).catch((err) => {
+        next(err);
+    });
+}
+
+
+module.exports = { getArticleByID, updateArticleByID, getCommentsByArticle, getArticles };
+

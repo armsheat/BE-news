@@ -1,5 +1,6 @@
 const { afterAll, beforeEach } = require("@jest/globals");
 const request = require("supertest");
+const toBeSortedBy = require('jest-sorted');
 
 const seed = require("../db/seeds/seed");
 const db = require('../db/connection');
@@ -91,6 +92,84 @@ describe('GET api/articles/:article_id', () => {
     .expect(400)
     .then(({ body }) => {
       expect(body.msg).toBe('Bad request');
+    })
+  });
+});
+
+describe.only('GET api/articles', () => {
+  test('status 200: returns an array of all articles', () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.articles).toBeInstanceOf(Array);
+      expect(body.articles.length).toBe(12);
+      body.articles.forEach((article) => {
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            number_of_comments: expect.any(String),
+          })
+        );
+      });
+    });       
+  });
+  test('status 200: takes a query to filter by topic', () => {
+    return request(app)
+    .get("/api/articles?topic=cats")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.articles).toBeInstanceOf(Array);
+      expect(body.articles.length).toBe(1);
+      expect(body.articles).toEqual(
+        [{
+          article_id: 5,
+          title: "UNCOVERED: catspiracy to bring down democracy",
+          topic: "cats",
+          author: "rogersop",
+          body: "Bastet walks amongst us, and the cats are taking arms!",
+          created_at: '2020-08-03T13:14:00.000Z',
+          votes: 0,
+          number_of_comments: '2',
+        }]
+      )
+    });
+
+  });
+  test('status 200: the articles should be sorted by date descending', () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.articles).toBeInstanceOf(Array);
+      expect(body.articles.length).toBe(12);
+      expect(body.articles).toBeSortedBy("created_at", {
+        descending: true,
+      });
+  });
+  });
+  test('status 400: the query is not a valid topic', () => {
+    return request(app)
+    .get("/api/articles?topic=dogs")
+    .expect(400)
+    .then(( { body }) => {
+      const { msg } = body;
+      expect(msg).toBe('Bad request')
+    })
+  });
+  test('status 400: the query is the wrong type', () => {
+    return request(app)
+    .get("/api/articles?topic=SELECT * FROM users")
+    .expect(400)
+    .then(( { body }) => {
+      const { msg } = body;
+      expect(msg).toBe('Bad request');
     })
   });
 });
@@ -196,3 +275,4 @@ describe('PATCH "api/articles/:article_id"', () => {
 describe('GET api/articles/:article_id/comments', () => {
   
 });
+  
