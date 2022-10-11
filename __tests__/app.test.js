@@ -226,6 +226,14 @@ describe.only('GET api/articles/:article_id/comments', () => {
       });
     }); 
   });
+  test('status 404 for an invalid article id', () => {
+    return request(app)
+    .get("/api/articles/20001/comments")
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe('no article found with that id')
+    })
+  });
 });
 
 describe('PATCH "api/articles/:article_id"', () => {
