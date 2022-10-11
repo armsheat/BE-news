@@ -32,11 +32,7 @@ function retrieveCommentsByArticle(article_id) {
     SELECT * FROM comments 
     WHERE comments.article_id = $1`, 
     [article_id]).then(({ rows }) => {
-        if (rows[0]) {
            return rows;
-        } else {
-            return Promise.reject({ status:404, msg:'no article found with that id'});
-        }
     })
 }
 
@@ -52,8 +48,7 @@ function retrieveArticles(topic) {
     if (validTopics.includes(topic)) {
         baseQuery += ` WHERE topic = $1`;
         topicArray.push(topic);
-    }
-    console.log(topic);
+    };
     baseQuery += ` GROUP BY articles.article_id ORDER BY created_at DESC;`
     return db.query(baseQuery, topicArray).then(({ rows }) => {
         if (rows[0]) {

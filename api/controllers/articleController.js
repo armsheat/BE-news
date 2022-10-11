@@ -30,21 +30,17 @@ function getArticles(req, res, next) {
 
 function getCommentsByArticle(req, res, next) {
     const { article_id } = req.params;
-    console.log(article_id)
+    const promises = [retrieveCommentsByArticle(article_id), retrieveArticleByID(article_id)]
 
-    getArticleByID(article_id).then((article) => {
-        if (article.number_of_comments === 0) {
+    Promise.all(promises).then((promises) => {
+        if(promises[1].number_of_comments === '0') {
             res.status(200).send({ msg: 'this article has no comments' })
+        } else { 
+            res.status(200).send({ comments: promises[0] });
         }
-    })
-    //invoke get article by id
-    // if the number of comments = 0
-    // send msg 'this article has no comments'
-    retrieveCommentsByArticle(req.params.article_id).then((comments) => {
-        res.status(200).send({ comments });
     }).catch((err) => {
         next(err);
     });
-}
+    }
 
 module.exports = { getArticleByID, updateArticleByID, getArticles, getCommentsByArticle };

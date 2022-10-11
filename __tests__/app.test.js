@@ -226,12 +226,12 @@ describe.only('GET api/articles/:article_id/comments', () => {
       });
     }); 
   });
-  test.only('status 200: returns a message if there are no comments for an article', () => {
+  test('status 200: returns a message if there are no comments for an article', () => {
     return request(app)
     .get("/api/articles/2/comments")
     .expect(200)
     .then(({ body }) => {
-      const msg = { body }
+      const { msg } = body
       expect(msg).toBe('this article has no comments')
     })
   });
