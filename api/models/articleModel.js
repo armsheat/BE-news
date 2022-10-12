@@ -59,5 +59,12 @@ function retrieveArticles(topic) {
     })
 }
 
+function addCommentOnArticle(article_id, body, user) {
+    return db.query(`INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *`, [user, body, article_id]).then(({ rows }) => {
+            return rows[0];
+    })
+}
 
-module.exports = { retrieveArticleByID, AmendArticleByID, retrieveArticles, retrieveCommentsByArticle };
+
+module.exports = { retrieveArticleByID, AmendArticleByID, retrieveArticles, retrieveCommentsByArticle, addCommentOnArticle };
+
