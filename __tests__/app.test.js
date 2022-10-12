@@ -178,13 +178,21 @@ describe.only('GET api/articles', () => {
       });
   });
   });
-  test('status 400: the order is not ASC ', () => {
+  test('status 400: the sortby given is not valid', () => {
+    return request(app)
+    .get("/api/articles?sort_by=Animals")
+    .expect(400)
+    .then(({ body }) => {
+    expect(body.msg).toBe('Bad request')
+   });
+  });
+  test('status 400: the order is not ASC or DESC', () => {
     return request(app)
     .get("/api/articles?order=Animals")
     .expect(400)
     .then(({ body }) => {
     expect(body.msg).toBe('Bad request')
-  });
+   });
   });
   test('status 400: the query is not a valid topic', () => {
     return request(app)
