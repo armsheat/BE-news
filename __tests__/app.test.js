@@ -154,6 +154,18 @@ describe('GET api/articles', () => {
       });
   });
   });
+  test('status 200: the articles can be sorted by other columns', () => {
+    return request(app)
+    .get("/api/articles?sortby=title")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.articles).toBeInstanceOf(Array);
+      expect(body.articles.length).toBe(12);
+      expect(body.articles).toBeSortedBy("title", {
+        descending: true,
+      });
+  });
+  });
   test('status 400: the query is not a valid topic', () => {
     return request(app)
     .get("/api/articles?topic=dogs")
@@ -204,7 +216,7 @@ describe('GET api/users', () => {
   });
 });
 
-describe.only('GET api/articles/:article_id/comments', () => {
+describe('GET api/articles/:article_id/comments', () => {
   test('status 200: responds with an array of comments associated with the correct article', () => {
     return request(app)
     .get("/api/articles/9/comments")
@@ -324,4 +336,4 @@ describe('PATCH "api/articles/:article_id"', () => {
 describe('GET api/articles/:article_id/comments', () => {
   
 });
-  
+
