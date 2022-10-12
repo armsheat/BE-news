@@ -154,7 +154,7 @@ describe('GET api/articles', () => {
       });
   });
   });
-  test('status 200: the articles can be sorted by other columns', () => {
+  test.only('status 200: the articles can be sorted by other columns', () => {
     return request(app)
     .get("/api/articles?sortby=title")
     .expect(200)
