@@ -322,7 +322,7 @@ describe('PATCH "api/articles/:article_id"', () => {
 });
 
 describe.only('POST api/articles/:article_id/comments', () => {
-  test('status 200: responds with the posted comment', () => {
+  test('status 201: responds with the posted comment', () => {
     return request(app)
     .post("/api/articles/2/comments")
     .send({ user : 'butter_bridge',
