@@ -36,7 +36,7 @@ function retrieveCommentsByArticle(article_id) {
     })
 }
 
-function retrieveArticles(topic, sort_by = 'created_at', order) {
+function retrieveArticles(topic, sort_by = 'created_at', order = 'DESC') {
     let baseQuery = `SELECT articles.* , COUNT(comments.article_id) AS number_of_comments 
     FROM articles 
     LEFT JOIN comments ON comments.article_id = articles.article_id`;
@@ -53,14 +53,14 @@ function retrieveArticles(topic, sort_by = 'created_at', order) {
     baseQuery += ` GROUP BY articles.article_id`
 
     if(validColumns.includes(sort_by)) {
-        baseQuery += ` ORDER BY ${sort_by} DESC;`
+        baseQuery += ` ORDER BY ${sort_by} `
     }
-    if(order === 'ASC') {
-        baseQuery = baseQuery.slice(0, -5);
-        console.log(baseQuery);
-        baseQuery += `ASC;`
+    if(!order === 'ASC' || !order === 'DESC') {
+        return Promise.reject({ status:400, msg:'Bad request'})
+    } else {
+        baseQuery += `${order};`
     }
-    console.log(baseQuery, queryArray)
+
     return db.query(baseQuery, queryArray).then(({ rows }) => {
         if (rows[0]) {
             return rows;

@@ -166,7 +166,7 @@ describe.only('GET api/articles', () => {
       });
   });
   });
-  test.only('status 200: the articles can be sorted by ascending too', () => {
+  test('status 200: the articles can be ordered by ascending too', () => {
     return request(app)
     .get("/api/articles?order=ASC")
     .expect(200)
@@ -176,6 +176,14 @@ describe.only('GET api/articles', () => {
       expect(body.articles).toBeSortedBy("created_at", {
         descending: false,
       });
+  });
+  });
+  test('status 400: the order is not ASC ', () => {
+    return request(app)
+    .get("/api/articles?order=Animals")
+    .expect(400)
+    .then(({ body }) => {
+    expect(body.msg).toBe('Bad request')
   });
   });
   test('status 400: the query is not a valid topic', () => {
