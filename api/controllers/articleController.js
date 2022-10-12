@@ -1,4 +1,4 @@
-const { retrieveArticleByID, AmendArticleByID, retrieveArticles, retrieveCommentsByArticle } = require('./../models/articleModel');
+const { retrieveArticleByID, AmendArticleByID, retrieveArticles, retrieveCommentsByArticle, addCommentOnArticle} = require('./../models/articleModel');
 
 
 function getArticleByID(req, res, next) {
@@ -44,4 +44,14 @@ function getCommentsByArticle(req, res, next) {
     });
     }
 
-module.exports = { getArticleByID, updateArticleByID, getArticles, getCommentsByArticle };
+function postCommentonArticle(req, res, next) {
+    const { article_id } = req.params;
+    const { body, user } = req.body
+    addCommentOnArticle(article_id, body, user).then((comment) => {
+        res.status(201).send({ comment });
+    }).catch((err) => {
+        next(err);
+    });
+}
+
+module.exports = { getArticleByID, updateArticleByID, getArticles, getCommentsByArticle, postCommentonArticle };

@@ -321,9 +321,26 @@ describe('PATCH "api/articles/:article_id"', () => {
   });
 });
 
-describe('POST api/articles/:article_id/comments', () => {
-  test('should ', () => {
-    
+describe.only('POST api/articles/:article_id/comments', () => {
+  test('status 200: responds with the posted comment', () => {
+    return request(app)
+    .post("/api/articles/2/comments")
+    .send({ user : 'butter_bridge',
+            body: 'the garage door is fixed!' })
+    .expect(201)
+    .then(({ body }) => {
+      const { comment } = body;
+      expect(comment).toEqual(
+        expect.objectContaining({
+          author: 'butter_bridge',
+          body: 'the garage door is fixed!',
+          comment_id: 19,
+          created_at: expect.any(String),
+          votes: 0,
+          article_id: 2,
+        })
+      )
+    }) 
   });
 });
   
