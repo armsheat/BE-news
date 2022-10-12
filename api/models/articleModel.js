@@ -36,21 +36,32 @@ function retrieveCommentsByArticle(article_id) {
     })
 }
 
-function retrieveArticles(topic) {
+function retrieveArticles(topic, sort_by = 'created_at', order) {
     let baseQuery = `SELECT articles.* , COUNT(comments.article_id) AS number_of_comments 
     FROM articles 
     LEFT JOIN comments ON comments.article_id = articles.article_id`;
     const validTopics = ['cats', 'mitch']
-    const topicArray = [];
+    const validColumns = ['title', 'created_at', 'author', 'body', 'votes', 'topic'];
+    const queryArray = [];
     if (topic && !validTopics.includes(topic)){
         return Promise.reject({ status:400, msg:'Bad request'});
     }
     if (validTopics.includes(topic)) {
-        baseQuery += ` WHERE topic = $1`;
-        topicArray.push(topic);
+        queryArray.push(topic);
+        baseQuery += ` WHERE topic = $${queryArray.length}`;
     };
-    baseQuery += ` GROUP BY articles.article_id ORDER BY created_at DESC;`
-    return db.query(baseQuery, topicArray).then(({ rows }) => {
+    baseQuery += ` GROUP BY articles.article_id`
+
+    if(validColumns.includes(sort_by)) {
+        baseQuery += ` ORDER BY ${sort_by} DESC;`
+    }
+    if(order === 'ASC') {
+        baseQuery = baseQuery.slice(0, -5);
+        console.log(baseQuery);
+        baseQuery += `ASC;`
+    }
+    console.log(baseQuery, queryArray)
+    return db.query(baseQuery, queryArray).then(({ rows }) => {
         if (rows[0]) {
             return rows;
         } else {

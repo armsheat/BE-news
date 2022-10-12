@@ -96,7 +96,7 @@ describe('GET api/articles/:article_id', () => {
   });
 });
 
-describe('GET api/articles', () => {
+describe.only('GET api/articles', () => {
   test('status 200: returns an array of all articles', () => {
     return request(app)
     .get("/api/articles")
@@ -154,15 +154,27 @@ describe('GET api/articles', () => {
       });
   });
   });
-  test.only('status 200: the articles can be sorted by other columns', () => {
+  test('status 200: the articles can be sorted by other columns', () => {
     return request(app)
-    .get("/api/articles?sortby=title")
+    .get("/api/articles?sort_by=title")
     .expect(200)
     .then(({ body }) => {
       expect(body.articles).toBeInstanceOf(Array);
       expect(body.articles.length).toBe(12);
       expect(body.articles).toBeSortedBy("title", {
         descending: true,
+      });
+  });
+  });
+  test.only('status 200: the articles can be sorted by ascending too', () => {
+    return request(app)
+    .get("/api/articles?order=ASC")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.articles).toBeInstanceOf(Array);
+      expect(body.articles.length).toBe(12);
+      expect(body.articles).toBeSortedBy("created_at", {
+        descending: false,
       });
   });
   });

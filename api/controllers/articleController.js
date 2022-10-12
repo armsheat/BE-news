@@ -21,8 +21,9 @@ function updateArticleByID(req, res, next) {
 }
 
 function getArticles(req, res, next) {
-    const { topic } = req.query;
-    retrieveArticles(topic).then((articles) => {
+    const { topic, sort_by, order } = req.query;
+    console.log(sort_by, order)
+    retrieveArticles(topic, sort_by, order).then((articles) => {
         res.status(200).send({ articles });
     }).catch((err) => {
         next(err);
