@@ -28,7 +28,12 @@ function AmendArticleByID(article_id, inc_votes) {
 }
 
 function retrieveCommentsByArticle(article_id) {
-    
+    return db.query(`
+    SELECT * FROM comments 
+    WHERE comments.article_id = $1`, 
+    [article_id]).then(({ rows }) => {
+           return rows;
+    })
 }
 
 function retrieveArticles(topic) {
@@ -43,8 +48,7 @@ function retrieveArticles(topic) {
     if (validTopics.includes(topic)) {
         baseQuery += ` WHERE topic = $1`;
         topicArray.push(topic);
-    }
-    console.log(topic);
+    };
     baseQuery += ` GROUP BY articles.article_id ORDER BY created_at DESC;`
     return db.query(baseQuery, topicArray).then(({ rows }) => {
         if (rows[0]) {

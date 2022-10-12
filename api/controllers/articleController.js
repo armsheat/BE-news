@@ -1,7 +1,6 @@
 
 const { retrieveArticleByID, AmendArticleByID, retrieveCommentsByArticle, retrieveArticles } = require('./../models/articleModel');
 
-
 function getArticleByID(req, res, next) {
     const { article_id } = req.params;
     retrieveArticleByID(article_id).then((article) => {
@@ -39,6 +38,19 @@ function getArticles(req, res, next) {
     });
 }
 
+function getCommentsByArticle(req, res, next) {
+    const { article_id } = req.params;
+    const promises = [retrieveCommentsByArticle(article_id), retrieveArticleByID(article_id)]
 
-module.exports = { getArticleByID, updateArticleByID, getCommentsByArticle, getArticles };
+    Promise.all(promises).then((promises) => {
+        if(promises[1].number_of_comments === '0') {
+            res.status(200).send({ msg: 'this article has no comments' })
+        } else { 
+            res.status(200).send({ comments: promises[0] });
+        }
+    }).catch((err) => {
+        next(err);
+    });
+    }
 
+module.exports = { getArticleByID, updateArticleByID, getArticles, getCommentsByArticle };
