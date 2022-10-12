@@ -5,6 +5,7 @@ const getTopics = require('./controllers/topicController');
 
 const { getArticleByID, updateArticleByID, getCommentsByArticle, getArticles } = require('./controllers/articleController');
 
+
 const getUsers = require('./controllers/userController');
 
 app.use(express.json());

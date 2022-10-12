@@ -96,7 +96,7 @@ describe('GET api/articles/:article_id', () => {
   });
 });
 
-describe.only('GET api/articles', () => {
+describe('GET api/articles', () => {
   test('status 200: returns an array of all articles', () => {
     return request(app)
     .get("/api/articles")
@@ -204,6 +204,55 @@ describe('GET api/users', () => {
   });
 });
 
+describe('GET api/articles/:article_id/comments', () => {
+  test('status 200: responds with an array of comments associated with the correct article', () => {
+    return request(app)
+    .get("/api/articles/9/comments")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.comments).toBeInstanceOf(Array);
+      expect(body.comments.length).toBe(2);
+      body.comments.forEach((comment) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            article_id: expect.any(Number),
+            votes: expect.any(Number),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            comment_id: expect.any(Number),
+          })
+        );
+      });
+    }); 
+  });
+  test('status 200: returns a message if there are no comments for an article', () => {
+    return request(app)
+    .get("/api/articles/2/comments")
+    .expect(200)
+    .then(({ body }) => {
+      const { msg } = body
+      expect(msg).toBe('this article has no comments')
+    })
+  });
+  test('status 404 for an invalid article id', () => {
+    return request(app)
+    .get("/api/articles/20001/comments")
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe('no article found with that id')
+    })
+  });
+  test('status 400 for an article id of the wrong type', () => {
+    return request(app)
+    .get("/api/articles/SELECT * FROM articles/comments")
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Bad request');
+    })
+  });
+});
+
 describe('PATCH "api/articles/:article_id"', () => {
   test('status 200, responds with the updated article and correctly amended votes', () => {
     return request(app)
@@ -272,7 +321,9 @@ describe('PATCH "api/articles/:article_id"', () => {
   });
 });
 
-describe('GET api/articles/:article_id/comments', () => {
-  
+describe('POST api/articles/:article_id/comments', () => {
+  test('should ', () => {
+    
+  });
 });
   
