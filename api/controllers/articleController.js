@@ -20,15 +20,6 @@ function updateArticleByID(req, res, next) {
     });
 }
 
-function getCommentsByArticle(req, res, next) {
-    const { article_id } = req.params;
-    retrieveCommentsByArticle(article_id).then((article) => {
-        res.status(200).send({ article });
-    }).catch((err) => {
-        next(err);
-    });
-}
-
 function getArticles(req, res, next) {
     const { topic } = req.query;
     retrieveArticles(topic).then((articles) => {
@@ -53,4 +44,17 @@ function getCommentsByArticle(req, res, next) {
     });
     }
 
-module.exports = { getArticleByID, updateArticleByID, getArticles, getCommentsByArticle };
+function postCommentonArticle(req, res, next) {
+    console.log('in the controller')
+    const { article_id } = req.params;
+    const { body, user } = req.body
+    const promises = [retrieveArticleByID(article_id), addCommentOnArticle(article_id, body, user) ]
+
+    Promise.all(promises).then((promises) => {
+        res.status(201).send({ comment: promises[1] })
+    }).catch((err) => {
+        next(err);
+    });
+}
+
+module.exports = { getArticleByID, updateArticleByID, getArticles, getCommentsByArticle, postCommentonArticle };

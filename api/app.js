@@ -3,7 +3,7 @@ const app = express();
 
 const getTopics = require('./controllers/topicController');
 
-const { getArticleByID, updateArticleByID, getCommentsByArticle, getArticles } = require('./controllers/articleController');
+const { getArticleByID, updateArticleByID, getCommentsByArticle, getArticles, postCommentonArticle } = require('./controllers/articleController');
 
 const getUsers = require('./controllers/userController');
 
@@ -13,13 +13,15 @@ app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticleByID);
 
-app.get("/api/articles", getArticles)
+app.get("/api/articles", getArticles);
 
 app.get("/api/users", getUsers);
 
-app.get("/api/articles/:article_id/comments", getCommentsByArticle)
+app.get("/api/articles/:article_id/comments", getCommentsByArticle);
 
-app.patch("/api/articles/:article_id", updateArticleByID)
+app.patch("/api/articles/:article_id", updateArticleByID);
+
+app.post("/api/articles/:article_id/comments", postCommentonArticle)
 
 //all wrong paths get a 404
 app.all("/api/*", (req, res, next) => {
