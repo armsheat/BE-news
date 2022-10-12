@@ -342,7 +342,7 @@ describe.only('POST api/articles/:article_id/comments', () => {
       )
     }) 
   })
-  test('status 400, "bad request", POST /api/articles/2/comments ', () => {
+  test('status 400, "bad request" for an empty object', () => {
     return request(app)
       .post("/api/articles/2/comments")
       .send({})
@@ -352,6 +352,30 @@ describe.only('POST api/articles/:article_id/comments', () => {
           "Bad request"
         );
       });
+  });
+  test('status 404, "no article found with that id" if wrong article id given', () => {
+    return request(app)
+      .post("/api/articles/2000/comments")
+      .send({ user : 'butter_bridge',
+      body: 'the garage door is fixed!' })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          "no article found with that id"
+        );
+      });
+  });
+  test('status 400 when the article is not a number', () => {
+    return request(app)
+    .post("/api/articles/SQLINJECT/comments")
+    .send({ user : 'butter_bridge',
+    body: 'the garage door is fixed!' })
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe(
+        "Bad request"
+      );
+    });
   });
 });
   

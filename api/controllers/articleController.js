@@ -45,10 +45,13 @@ function getCommentsByArticle(req, res, next) {
     }
 
 function postCommentonArticle(req, res, next) {
+    console.log('in the controller')
     const { article_id } = req.params;
     const { body, user } = req.body
-    addCommentOnArticle(article_id, body, user).then((comment) => {
-        res.status(201).send({ comment });
+    const promises = [retrieveArticleByID(article_id), addCommentOnArticle(article_id, body, user) ]
+
+    Promise.all(promises).then((promises) => {
+        res.status(201).send({ comment: promises[1] })
     }).catch((err) => {
         next(err);
     });
