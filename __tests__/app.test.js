@@ -341,6 +341,17 @@ describe.only('POST api/articles/:article_id/comments', () => {
         })
       )
     }) 
+  })
+  test('status 400, "bad request", POST /api/articles/2/comments ', () => {
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send({})
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe(
+          "Bad request"
+        );
+      });
   });
 });
   
