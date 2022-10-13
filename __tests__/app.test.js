@@ -321,7 +321,7 @@ describe('PATCH "api/articles/:article_id"', () => {
   });
 });
 
-describe.only('POST api/articles/:article_id/comments', () => {
+describe('POST api/articles/:article_id/comments', () => {
   test('status 201: responds with the posted comment', () => {
     return request(app)
     .post("/api/articles/2/comments")
@@ -378,4 +378,14 @@ describe.only('POST api/articles/:article_id/comments', () => {
     });
   });
 });
-  
+
+describe('GET api', () => {
+  test('status 200: returns a json file describing the endpoints', () => {
+    return request(app)
+    .get("/api")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.endpoints)
+    })
+  });
+});

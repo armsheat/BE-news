@@ -6,4 +6,8 @@ function retrieveTopics() {
     })
 }
 
-module.exports = retrieveTopics;
+function retrieveJSON() {
+    return 
+}
+
+module.exports = { retrieveTopics, retrieveJSON };
