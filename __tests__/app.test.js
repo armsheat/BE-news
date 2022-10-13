@@ -379,7 +379,7 @@ describe('POST api/articles/:article_id/comments', () => {
   });
 });
   
-describe('DELETE api/comments/:comment_id', () => {
+describe.only('DELETE api/comments/:comment_id', () => {
   test('status 204: returns no content ', () => {
     return request(app)
     .delete("/api/comments/5")

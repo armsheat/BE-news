@@ -7,6 +7,8 @@ const { getArticleByID, updateArticleByID, getCommentsByArticle, getArticles, po
 
 const getUsers = require('./controllers/userController');
 
+const deleteCommentByID = require('./controllers/commentController')
+
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
@@ -23,7 +25,7 @@ app.patch("/api/articles/:article_id", updateArticleByID);
 
 app.post("/api/articles/:article_id/comments", postCommentonArticle)
 
-app.delete('DELETE api/comments/:comment_id', deleteCommentByID);
+app.delete('/api/comments/:comment_id', deleteCommentByID);
 
 //all wrong paths get a 404
 app.all("/api/*", (req, res, next) => {
