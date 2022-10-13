@@ -379,13 +379,13 @@ describe('POST api/articles/:article_id/comments', () => {
   });
 });
 
-describe('GET api', () => {
+describe.only('GET api', () => {
   test('status 200: returns a json file describing the endpoints', () => {
     return request(app)
     .get("/api")
     .expect(200)
     .then(({ body }) => {
-      expect(body.endpoints)
+      expect(typeof body.endpoints).toBe('object')
     })
   });
 });

@@ -10,7 +10,7 @@ function getTopics(req, res, next) {
 }
 
 function getJSON(req, res, next) {
-    retrieveJSON().then(({ endpoints }) => {
+    retrieveJSON().then((endpoints) => {
         res.status(200).send({ endpoints })
     })
     .catch((err) => {

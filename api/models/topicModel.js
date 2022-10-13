@@ -1,4 +1,6 @@
 const db = require('./../../db/connection');
+const fs = require('fs/promises')
+const endpointJSON = require('../../endpoints.json')
 
 function retrieveTopics() {
     return db.query(`SELECT * FROM topics`).then(({ rows }) => {
@@ -7,7 +9,7 @@ function retrieveTopics() {
 }
 
 function retrieveJSON() {
-    return 
+    return Promise.resolve(endpointJSON);
 }
 
 module.exports = { retrieveTopics, retrieveJSON };

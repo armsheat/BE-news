@@ -1,5 +1,5 @@
 
-const { retrieveArticleByID, AmendArticleByID, retrieveCommentsByArticle, retrieveArticles } = require('./../models/articleModel');
+const { retrieveArticleByID, AmendArticleByID, retrieveCommentsByArticle, retrieveArticles, addCommentOnArticle } = require('./../models/articleModel');
 
 function getArticleByID(req, res, next) {
     const { article_id } = req.params;
@@ -45,7 +45,6 @@ function getCommentsByArticle(req, res, next) {
     }
 
 function postCommentonArticle(req, res, next) {
-    console.log('in the controller')
     const { article_id } = req.params;
     const { body, user } = req.body
     const promises = [retrieveArticleByID(article_id), addCommentOnArticle(article_id, body, user) ]
