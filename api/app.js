@@ -23,6 +23,8 @@ app.patch("/api/articles/:article_id", updateArticleByID);
 
 app.post("/api/articles/:article_id/comments", postCommentonArticle)
 
+
+
 //all wrong paths get a 404
 app.all("/api/*", (req, res, next) => {
     res
