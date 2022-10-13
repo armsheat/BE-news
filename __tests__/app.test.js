@@ -395,4 +395,14 @@ describe.only('DELETE api/comments/:comment_id', () => {
       );
     })   
   });
+  test('status 400 if the comment_id is in an incorrect format', () => {
+    return request(app)
+    .delete('/api/comments/SELECT * FROM users')
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe(
+        "Bad request"
+      );
+    })   
+  });
 });
