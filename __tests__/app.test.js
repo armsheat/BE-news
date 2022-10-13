@@ -385,4 +385,14 @@ describe.only('DELETE api/comments/:comment_id', () => {
     .delete("/api/comments/5")
     .expect(204)
   });
+  test('status 404 if the comment_id does not exist but is in a valid format', () => {
+    return request(app)
+    .delete('/api/comments/50000')
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe(
+        "invalid comment_id"
+      );
+    })   
+  });
 });
