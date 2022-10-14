@@ -154,22 +154,61 @@ describe('GET api/articles', () => {
       });
   });
   });
-  test('status 400: the query is not a valid topic', () => {
+  test('status 200: the articles can be sorted by other columns', () => {
     return request(app)
-    .get("/api/articles?topic=dogs")
-    .expect(400)
-    .then(( { body }) => {
-      const { msg } = body;
-      expect(msg).toBe('Bad request')
-    })
+    .get("/api/articles?sort_by=title")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.articles).toBeInstanceOf(Array);
+      expect(body.articles.length).toBe(12);
+      expect(body.articles).toBeSortedBy("title", {
+        descending: true,
+      });
   });
-  test('status 400: the query is the wrong type', () => {
+  });
+  test('status 200: the articles can be ordered by ascending too', () => {
+    return request(app)
+    .get("/api/articles?order=ASC")
+    .expect(200)
+    .then(({ body }) => {
+      expect(body.articles).toBeInstanceOf(Array);
+      expect(body.articles.length).toBe(12);
+      expect(body.articles).toBeSortedBy("created_at", {
+        descending: false,
+      });
+  });
+  });
+  test('status 200: responds with an empty array if given a valid topic without any articles', () => {
+    return request(app)
+    .get("/api/articles?topic=paper")
+    .expect(200)
+    .then(({ body }) => {
+    expect(body.articles).toEqual([])
+   });
+  });
+  test('status 400: the sortby given is not one of the columns', () => {
+    return request(app)
+    .get("/api/articles?sort_by=Animals")
+    .expect(400)
+    .then(({ body }) => {
+    expect(body.msg).toBe('Bad request')
+   });
+  });
+  test('status 400: the order is not ASC or DESC', () => {
+    return request(app)
+    .get("/api/articles?order=Animals")
+    .expect(400)
+    .then(({ body }) => {
+    expect(body.msg).toBe('Bad request')
+   });
+  });
+  test('status 404: the topic is the wrong type', () => {
     return request(app)
     .get("/api/articles?topic=SELECT * FROM users")
-    .expect(400)
+    .expect(404)
     .then(( { body }) => {
       const { msg } = body;
-      expect(msg).toBe('Bad request');
+      expect(msg).toBe('topic not found');
     })
   });
 });
@@ -379,7 +418,7 @@ describe('POST api/articles/:article_id/comments', () => {
   });
 });
 
-describe.only('GET api', () => {
+describe('GET api', () => {
   test('status 200: returns a json file describing the endpoints', () => {
     return request(app)
     .get("/api")
@@ -389,3 +428,33 @@ describe.only('GET api', () => {
     })
   });
 });
+
+  
+describe('DELETE api/comments/:comment_id', () => {
+  test('status 204: returns no content ', () => {
+    return request(app)
+    .delete("/api/comments/5")
+    .expect(204)
+  });
+  test('status 404 if the comment_id does not exist but is in a valid format', () => {
+    return request(app)
+    .delete('/api/comments/50000')
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe(
+        "invalid comment_id"
+      );
+    })   
+  });
+  test('status 400 if the comment_id is in an incorrect format', () => {
+    return request(app)
+    .delete('/api/comments/SELECT * FROM users')
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe(
+        "Bad request"
+      );
+    })   
+  });
+});
+
