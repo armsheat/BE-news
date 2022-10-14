@@ -1,4 +1,3 @@
-
 const { retrieveArticleByID, AmendArticleByID, retrieveCommentsByArticle, retrieveArticles } = require('./../models/articleModel');
 
 function getArticleByID(req, res, next) {
@@ -21,8 +20,8 @@ function updateArticleByID(req, res, next) {
 }
 
 function getArticles(req, res, next) {
-    const { topic } = req.query;
-    retrieveArticles(topic).then((articles) => {
+    const { topic, sort_by, order } = req.query;
+    retrieveArticles(topic, sort_by, order).then((articles) => {
         res.status(200).send({ articles });
     }).catch((err) => {
         next(err);

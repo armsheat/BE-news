@@ -2,9 +2,8 @@
 
 SELECT articles.* , COUNT(comments.article_id) AS number_of_comments 
 FROM articles 
-LEFT JOIN comments ON comments.article_id = articles.article_id
-WHERE topic = 'cats'
-GROUP BY articles.article_id
-ORDER BY created_at DESC;
+LEFT JOIN comments ON comments.article_id = articles.article_id 
+GROUP BY articles.article_id 
+ORDER BY title DESC; 
 
 

@@ -36,24 +36,39 @@ function retrieveCommentsByArticle(article_id) {
     })
 }
 
-function retrieveArticles(topic) {
+function retrieveArticles(topic, sort_by = 'created_at', order = 'DESC') {
     let baseQuery = `SELECT articles.* , COUNT(comments.article_id) AS number_of_comments 
     FROM articles 
     LEFT JOIN comments ON comments.article_id = articles.article_id`;
-    const validTopics = ['cats', 'mitch']
-    const topicArray = [];
-    if (topic && !validTopics.includes(topic)){
-        return Promise.reject({ status:400, msg:'Bad request'});
-    }
-    if (validTopics.includes(topic)) {
-        baseQuery += ` WHERE topic = $1`;
-        topicArray.push(topic);
-    };
-    baseQuery += ` GROUP BY articles.article_id ORDER BY created_at DESC;`
-    return db.query(baseQuery, topicArray).then(({ rows }) => {
-        if (rows[0]) {
-            return rows;
+   
+    const validColumns = ['title', 'created_at', 'author', 'body', 'votes', 'topic'];
+    const queryArray = [];
+    const validTopics = ['paper', 'mitch', 'cats']
+
+    if (topic) {
+        if (validTopics.includes(topic)) {
+            queryArray.push(topic);
+            baseQuery += ` WHERE topic = $1`;
         } else {
+            return Promise.reject({ status:404, msg:'topic not found'})
+        }         
+    };
+    baseQuery += ` GROUP BY articles.article_id`
+
+    if(validColumns.includes(sort_by)) {
+        baseQuery += ` ORDER BY ${sort_by} `
+    }
+    if(!order === 'ASC' || !order === 'DESC') {
+        return Promise.reject({ status:400, msg:'Bad request'})
+    } else {
+        baseQuery += `${order};`
+    }
+    
+    return db.query(baseQuery, queryArray).then(({ rows }) => {
+        if (rows.length >= 0) {
+            return rows;
+        } 
+        else {
             return Promise.reject({ status:404, msg:'invalid query'});
         }
     })
