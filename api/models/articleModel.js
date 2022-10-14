@@ -40,15 +40,18 @@ function retrieveArticles(topic, sort_by = 'created_at', order = 'DESC') {
     let baseQuery = `SELECT articles.* , COUNT(comments.article_id) AS number_of_comments 
     FROM articles 
     LEFT JOIN comments ON comments.article_id = articles.article_id`;
-    const validTopics = ['cats', 'mitch']
+   
     const validColumns = ['title', 'created_at', 'author', 'body', 'votes', 'topic'];
     const queryArray = [];
-    if (topic && !validTopics.includes(topic)){
-        return Promise.reject({ status:400, msg:'Bad request'});
-    }
-    if (validTopics.includes(topic)) {
-        queryArray.push(topic);
-        baseQuery += ` WHERE topic = $${queryArray.length}`;
+    const validTopics = ['paper', 'mitch', 'cats']
+
+    if (topic) {
+        if (validTopics.includes(topic)) {
+            queryArray.push(topic);
+            baseQuery += ` WHERE topic = $1`;
+        } else {
+            return Promise.reject({ status:404, msg:'topic not found'})
+        }         
     };
     baseQuery += ` GROUP BY articles.article_id`
 
@@ -60,11 +63,12 @@ function retrieveArticles(topic, sort_by = 'created_at', order = 'DESC') {
     } else {
         baseQuery += `${order};`
     }
-
+    
     return db.query(baseQuery, queryArray).then(({ rows }) => {
-        if (rows[0]) {
+        if (rows.length >= 0) {
             return rows;
-        } else {
+        } 
+        else {
             return Promise.reject({ status:404, msg:'invalid query'});
         }
     })
