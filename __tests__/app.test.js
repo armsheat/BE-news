@@ -360,7 +360,7 @@ describe('PATCH "api/articles/:article_id"', () => {
   });
 });
 
-describe.only('POST api/articles/:article_id/comments', () => {
+describe('POST api/articles/:article_id/comments', () => {
   test('status 201: responds with the posted comment', () => {
     return request(app)
     .post("/api/articles/2/comments")
@@ -415,6 +415,34 @@ describe.only('POST api/articles/:article_id/comments', () => {
         "Bad request"
       );
     });
+  });
+});
+  
+describe('DELETE api/comments/:comment_id', () => {
+  test('status 204: returns no content ', () => {
+    return request(app)
+    .delete("/api/comments/5")
+    .expect(204)
+  });
+  test('status 404 if the comment_id does not exist but is in a valid format', () => {
+    return request(app)
+    .delete('/api/comments/50000')
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe(
+        "invalid comment_id"
+      );
+    })   
+  });
+  test('status 400 if the comment_id is in an incorrect format', () => {
+    return request(app)
+    .delete('/api/comments/SELECT * FROM users')
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe(
+        "Bad request"
+      );
+    })   
   });
 });
 
