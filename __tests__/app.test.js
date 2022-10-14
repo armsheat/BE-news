@@ -96,7 +96,7 @@ describe('GET api/articles/:article_id', () => {
   });
 });
 
-describe.only('GET api/articles', () => {
+describe('GET api/articles', () => {
   test('status 200: returns an array of all articles', () => {
     return request(app)
     .get("/api/articles")
@@ -417,6 +417,18 @@ describe('POST api/articles/:article_id/comments', () => {
     });
   });
 });
+
+describe('GET api', () => {
+  test('status 200: returns a json file describing the endpoints', () => {
+    return request(app)
+    .get("/api")
+    .expect(200)
+    .then(({ body }) => {
+      expect(typeof body.endpoints).toBe('object')
+    })
+  });
+});
+
   
 describe('DELETE api/comments/:comment_id', () => {
   test('status 204: returns no content ', () => {

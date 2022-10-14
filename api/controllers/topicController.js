@@ -1,4 +1,4 @@
-const retrieveTopics = require('../models/topicModel');
+const { retrieveTopics, retrieveJSON } = require('../models/topicModel');
 
 function getTopics(req, res, next) {
     retrieveTopics().then((topics) => {
@@ -9,4 +9,13 @@ function getTopics(req, res, next) {
     });
 }
 
-module.exports = getTopics;
+function getJSON(req, res, next) {
+    retrieveJSON().then((endpoints) => {
+        res.status(200).send({ endpoints })
+    })
+    .catch((err) => {
+        next(err);
+    });
+}
+
+module.exports = { getTopics, getJSON };
