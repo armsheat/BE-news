@@ -43,15 +43,13 @@ function retrieveArticles(topic, sort_by = 'created_at', order = 'DESC') {
    
     const validColumns = ['title', 'created_at', 'author', 'body', 'votes', 'topic'];
     const queryArray = [];
-    const validTopics = ['paper', 'mitch', 'cats']
+    
 
     if (topic) {
-        if (validTopics.includes(topic)) {
+        
             queryArray.push(topic);
             baseQuery += ` WHERE topic = $1`;
-        } else {
-            return Promise.reject({ status:404, msg:'topic not found'})
-        }         
+               
     };
     baseQuery += ` GROUP BY articles.article_id`
 
