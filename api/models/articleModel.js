@@ -41,7 +41,7 @@ function retrieveArticles(topic, sort_by = 'created_at', order = 'DESC') {
     FROM articles 
     LEFT JOIN comments ON comments.article_id = articles.article_id`;
    
-    const validColumns = ['title', 'created_at', 'author', 'body', 'votes', 'topic'];
+    const validColumns = ['title', 'created_at', 'author', 'body', 'votes', 'topic', 'number_of_comments'];
     const queryArray = [];
     
 
