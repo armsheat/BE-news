@@ -60,7 +60,7 @@ app.use((err, req, res, next) => {
 //DEFAULT ERROR HANDLING
 app.use((err, req, res, next) => {
     console.log(err);
-    res.status(500).send({ msg: "INTERNAL SERVER ERROR." });
+    res.status(500).send({ msg: "INTERNAL SERVER ERROR. test" });
   });
 
 module.exports = app;
